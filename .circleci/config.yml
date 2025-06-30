@@ -3,10 +3,14 @@ orbs:
   terraform: circleci/terraform@3.6.0
 workflows:
   version: 2
+  terraform_init:
+    jobs:
+      - terraform/init:
+          path: infra-demo/infra
   terraform_apply:
     jobs:
       - terraform/apply:
-          path: infra/main.tf
+          path: infra-demo/infra
           filters:
             branches:
               only: main

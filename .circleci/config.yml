@@ -1,0 +1,12 @@
+version: 2.1
+orbs:
+  terraform: circleci/terraform@3.6.0
+workflows:
+  version: 2
+  terraform_apply:
+    jobs:
+      - terraform/apply:
+          path: infra
+          filters:
+            branches:
+              only: main

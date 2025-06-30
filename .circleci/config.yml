@@ -6,7 +6,7 @@ workflows:
   terraform_apply:
     jobs:
       - terraform/apply:
-          path: /infra
+          path: infra/main.tf
           filters:
             branches:
               only: main

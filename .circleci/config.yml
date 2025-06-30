@@ -6,11 +6,11 @@ workflows:
   terraform_init:
     jobs:
       - terraform/init:
-          path: infra-demo/infra
+          path: infra
   terraform_apply:
     jobs:
       - terraform/apply:
-          path: infra-demo/infra
+          path: infra
           filters:
             branches:
               only: main

@@ -1,0 +1,83 @@
+body {
+  font-family: 'Roboto', Arial, sans-serif;
+  background: #f4f6f8;
+  margin: 0;
+  color: #222;
+}
+.container {
+  max-width: 700px;
+  margin: 40px auto;
+  background: #fff;
+  padding: 32px 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+}
+header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+h1 {
+  margin: 0;
+  font-size: 2.5em;
+  font-weight: 700;
+}
+.subtitle {
+  color: #666;
+  font-size: 1.2em;
+  margin-bottom: 8px;
+}
+.contact a {
+  color: #0073e6;
+  text-decoration: none;
+  margin: 0 4px;
+}
+section {
+  margin-bottom: 28px;
+}
+h2 {
+  color: #0073e6;
+  margin-bottom: 10px;
+  font-size: 1.3em;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 4px;
+}
+.skills {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.skills li {
+  background: #e3f0fa;
+  color: #0073e6;
+  padding: 6px 14px;
+  border-radius: 16px;
+  font-size: 1em;
+}
+.job {
+  margin-bottom: 18px;
+}
+.job h3 {
+  margin: 0;
+  font-size: 1.1em;
+  font-weight: 700;
+}
+.job h3 span {
+  font-weight: 400;
+  color: #666;
+}
+.job-date {
+  font-size: 0.95em;
+  color: #999;
+  margin-bottom: 6px;
+}
+ul {
+  margin: 0;
+  padding-left: 18px;
+}
+@media (max-width: 600px) {
+  .container {
+    padding: 18px 8px;
+  }
+}

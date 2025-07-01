@@ -1,3 +1,7 @@
 infra/*
 !infra/main.tf
 .history
+backend/*
+lambda.zip
+lambda
+

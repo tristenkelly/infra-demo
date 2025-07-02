@@ -196,11 +196,11 @@ resource "aws_security_group" "instance_sg" {
 }
 
 resource "aws_instance" "app_instance" {
-  ami                    = "ami-0c55babe742f85a2a"  # Replace with your desired AMI (Amazon Machine Image)
-  instance_type          = "t2.micro" # Replace with your desired instance type
-  key_name               = "your-key-pair" # Replace with your key pair name
+  ami                    = "ami-0c55babe742f85a2a"
+  instance_type          = "t2.micro"
+  key_pair               = "instance_key_pair"
   vpc_security_group_ids = [aws_security_group.instance_sg.id]
-  user_data = file("user_data.sh") # Refer to the user_data script
+  user_data = file("user_data.sh")
 
   tags = {
     Name = "Node.js App Instance"

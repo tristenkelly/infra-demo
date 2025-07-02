@@ -157,32 +157,6 @@ resource "aws_lambda_function" "visit_logger" {
   }
 }
 
-resource "aws_apigatewayv2_api" "http_api" {
-  name          = "visit_api"
-  protocol_type = "HTTP"
-
-  cors_configuration {
-    allow_origins = ["http://infra-demo-bucket-resume-tk.s3-website.us-east-2.amazonaws.com"]         
-    allow_methods = ["POST", "OPTIONS"]
-    allow_headers = ["content-type", "Access-Control-Allow-Origin"]
-    max_age       = 3600
-  }
-}
-
-resource "aws_apigatewayv2_integration" "lambda_integration" {
-  api_id           = aws_apigatewayv2_api.http_api.id
-  integration_type = "AWS_PROXY"
-  integration_uri  = aws_lambda_function.visit_logger.invoke_arn
-  integration_method = "POST"
-  payload_format_version = "2.0"
-}
-
-resource "aws_apigatewayv2_route" "visit_route" {
-  api_id    = aws_apigatewayv2_api.http_api.id
-  route_key = "POST /"
-  target    = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
-}
-
 resource "aws_lambda_permission" "apigw_lambda" {
   statement_id  = "AllowAPIGatewayInvoke"
   action        = "lambda:InvokeFunction"
@@ -191,7 +165,51 @@ resource "aws_lambda_permission" "apigw_lambda" {
   source_arn    = "${aws_apigatewayv2_api.http_api.execution_arn}/*/*"
 }
 
+resource "aws_security_group" "instance_sg" {
+  name        = "instance-sg"
+  description = "Allow SSH and HTTP traffic"
 
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 8080 
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "instance-sg"
+  }
+}
+
+resource "aws_instance" "app_instance" {
+  ami                    = "ami-0c55babe742f85a2a"  # Replace with your desired AMI (Amazon Machine Image)
+  instance_type          = "t2.micro" # Replace with your desired instance type
+  key_name               = "your-key-pair" # Replace with your key pair name
+  vpc_security_group_ids = [aws_security_group.instance_sg.id]
+  user_data = file("user_data.sh") # Refer to the user_data script
+
+  tags = {
+    Name = "Node.js App Instance"
+  }
+}
+
+output "public_ip" {
+  value = aws_instance.app_instance.public_ip
+}
 
 
 output "website_endpoint" {

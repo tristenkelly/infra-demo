@@ -5,4 +5,9 @@ backend/*
 !backend/user_data.sh
 lambda.zip
 lambda
-
+node_modules   
+package-lock.json
+package.json
+frontend/node_modules
+frontend/package-lock.json
+frontend/package.json

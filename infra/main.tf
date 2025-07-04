@@ -138,10 +138,9 @@ npm install
 npm install -g pm2
 npm install express
 npm install @aws-sdk/client-dynamodb
-pm2 start source.mjs --name my-app
-pm2 save
+pm2 start source.mjs --name resume-app --env PORT=8080
+
 EOC
-node source.mjs
 echo "User data script finished"
 EOF
 

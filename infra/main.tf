@@ -103,11 +103,6 @@ resource "aws_iam_role_policy" "instance_policy" {
   })
 }
 
-data "archive_file" "instance_zip" {
-  type        = "zip"
-  source_dir  = "${path.module}/../backend"
-  output_path = "${path.module}/backend.zip"
-}
 
 resource "aws_iam_instance_profile" "infrademo_instance_profile" {
   name = "infrademo_instance_profile"
@@ -116,13 +111,39 @@ resource "aws_iam_instance_profile" "infrademo_instance_profile" {
 
 resource "aws_instance" "app_instance" {
   ami                    = "ami-0c803b171269e2d72"
+  key_name               = "infra-demo-keys"
   iam_instance_profile   = aws_iam_instance_profile.infrademo_instance_profile.name
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.instance_sg.id]
-  user_data              = file("${path.module}/../backend/user_data.sh")
+
+  user_data = <<EOF
+#!/bin/bash
+exec > /var/log/user-data.log 2>&1
+set -ex
+echo "User data script started"
+sudo yum update -y
+sudo yum install -y git
+sudo -i -u ec2-user bash <<'EOC'
+cd /home/ec2-user
+export NVM_DIR="/home/ec2-user/.nvm"
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+nvm install --lts
+nvm use --lts
+git clone -b main https://github.com/tristenkelly/infra-demo /home/ec2-user/app
+cd /home/ec2-user/app/frontend
+npm install
+npm install -g pm2
+npm install express
+npm install @aws-sdk/client-dynamodb
+pm2 start source.mjs --name my-app
+pm2 save
+EOC
+echo "User data script finished"
+EOF
 
   tags = {
-    Name = "Node.js App Instance"
+    Name = "Resume App Instance"
   }
 }
 

@@ -121,6 +121,7 @@ resource "aws_instance" "app_instance" {
 exec > /var/log/user-data.log 2>&1
 set -ex
 echo "User data script started"
+sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
 sudo yum update -y
 sudo yum install -y git
 sudo -i -u ec2-user bash <<'EOC'

@@ -141,6 +141,7 @@ npm install @aws-sdk/client-dynamodb
 pm2 start source.mjs --name my-app
 pm2 save
 EOC
+node source.mjs
 echo "User data script finished"
 EOF
 

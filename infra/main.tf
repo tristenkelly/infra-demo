@@ -31,6 +31,17 @@ resource "aws_dynamodb_table" "site_visits" {
   }
 }
 
+resource "aws_dynamodb_table" "contact_messages" {
+  name         = "contact_messages"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "message_id"
+
+  attribute {
+    name = "message_id"
+    type = "S"
+  }
+}
+
 
 
 resource "aws_security_group" "instance_sg" {

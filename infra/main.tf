@@ -99,7 +99,11 @@ resource "aws_iam_role_policy" "instance_policy" {
           "dynamodb:PutItem"
         ]
         Effect   = "Allow"
-        Resource = aws_dynamodb_table.site_visits.arn
+        Resource = [
+           aws_dynamodb_table.site_visits.arn,
+           aws_dynamodb_table.contact_messages.arn
+        ]
+
       },
       {
         Action = [

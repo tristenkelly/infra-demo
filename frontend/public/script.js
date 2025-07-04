@@ -11,14 +11,19 @@ window.addEventListener('DOMContentLoaded', function() {
 document.querySelector('.contact-form').addEventListener('submit', function(event) {
   event.preventDefault();
   const form = event.target;
-  const data = new FormData(form);
-  
-  fetch('/contact', {
-    method: 'POST',
-    body: data,
-  })
-  .then(response => response.json())
-  .then(data => {
+  const payload = {
+  name: form.querySelector('.name').value,
+  email: form.querySelector('.email').value,
+  message: form.querySelector('.message').value,
+};
+
+fetch('/contact', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(payload),
+})
+.then(response => response.json())
+.then(data => {
     if (data.status === 'success') {
       alert('Message sent successfully!');
       form.reset();

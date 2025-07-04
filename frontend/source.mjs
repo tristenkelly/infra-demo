@@ -5,20 +5,20 @@ import { v4 as uuidv4 } from 'uuid';
 import { fileURLToPath } from 'url';
 
 const app = express();
-const PORT = process.env.PORT || 8080; 
+const PORT = process.env.PORT || 80; 
 
-// For __dirname in ES modules
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Middleware to parse JSON bodies
+
 app.use(express.json());
 
-// Serve static files from the frontend directory
+
 app.use(express.static(path.join(__dirname, 'public')));
 
-// DynamoDB client (ensure your EC2 has IAM permissions for DynamoDB)
-const client = new DynamoDBClient({ region: 'us-east-2' }); // Set your region
+
+const client = new DynamoDBClient({ region: 'us-east-2' }); 
 
 app.post('/visit', async (req, res) => {
   try {
@@ -27,7 +27,7 @@ app.post('/visit', async (req, res) => {
     const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
     const params = {
-      TableName: 'site-visits', // Your DynamoDB table name
+      TableName: 'site_visits',
       Item: {
         visit_id: { S: uuidv4() },
         timestamp: { S: timestamp },
@@ -44,7 +44,7 @@ app.post('/visit', async (req, res) => {
   }
 });
 
-// Start the server
+
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });

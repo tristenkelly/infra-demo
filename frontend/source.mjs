@@ -44,6 +44,34 @@ app.post('/visit', async (req, res) => {
   }
 });
 
+app.post('/contact', async (req, res) => {
+  try {
+    const { name, email, message } = req.body;
+
+    if (!name || !email || !message) {
+      return res.status(400).json({ status: 'error', message: 'All fields are required' });
+    }
+
+    const timestamp = new Date().toISOString();
+    const params = {
+      TableName: 'contact_messages',
+      Item: {
+        message_id: { S: uuidv4() },
+        name: { S: name },
+        email: { S: email },
+        message: { S: message },
+        timestamp: { S: timestamp },
+      },
+    };
+
+    await client.send(new PutItemCommand(params));
+    res.status(200).json({ status: 'success' });
+  } catch (error) {
+    console.error('Error writing to DynamoDB:', error);
+    res.status(500).json({ status: 'error', message: 'Failed to send message' });
+  }
+});
+
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running at http://localhost:${PORT}`);

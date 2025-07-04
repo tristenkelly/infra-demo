@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { fileURLToPath } from 'url';
 
 const app = express();
-const PORT = process.env.PORT || 8080; // Changed port here
+const PORT = process.env.PORT || 8080; 
 
 // For __dirname in ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -45,6 +45,6 @@ app.post('/visit', async (req, res) => {
 });
 
 // Start the server
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
